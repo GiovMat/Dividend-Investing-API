@@ -37,9 +37,27 @@ class Stock():
         self.dividend_perc_growth = self.dividends.pct_change().dropna().mean()
 
         # TODO calcolare il core gorwth,per ora usiamo la media dei dividendi negli ultimi 5 anni
-        self.core_growth=''
+        self.core_growth= self.dividend_perc_growth
 
         #! da correggere quando si inserirà il core growth, non tiene conto di rendimenti superiori al 10%
-        req_return = _hurdle_return[(self.dividend_perc_growth*100).round()]
-        self.present_value = (self.dividend_rate / (req_return - self.dividend_perc_growth)).round()
-        self.actual_return = (self.dividend_rate/self.current_price) + self.dividend_perc_growth
+        i = (self.core_growth*100).round()
+        if i > 10:
+            i = 10
+        req_return = _hurdle_return[i]
+        self.buy_value = (self.dividend_rate / (req_return - self.core_growth))
+        self.actual_return = (self.dividend_rate/self.current_price) + self.core_growth
+
+    def get_data(self):
+        data_result = { 'longName': self.name,
+                        'currency': self.currency,
+                        'exchange': self.exchange,
+                        'industry': self.industry,
+                        'sector'  : self.sector,
+                        'current_price' : self.current_price,
+                        'dividen_rate' : self.dividend_rate,
+                        'eps' : self.eps,
+                        'roe' : self.roe,
+                        'growth' : (self.core_growth * 100).round(2),
+                        'buy_value' : self.buy_value.round(2),
+                        'actual_return' : (self.actual_return * 100).round(2)}
+        return data_result
