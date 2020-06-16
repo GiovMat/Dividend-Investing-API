@@ -48,7 +48,8 @@ class Stock():
         self.actual_return = (self.dividend_rate/self.current_price) + self.core_growth
 
     def get_data(self):
-        data_result = { 'longName': self.name,
+        data_result = { 'symbol' : self.symbol,
+                        'longName': self.name,
                         'currency': self.currency,
                         'exchange': self.exchange,
                         'industry': self.industry,

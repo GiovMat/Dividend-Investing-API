@@ -7,6 +7,7 @@ app = Flask(__name__)
 def list():
     watchlist = request.json['watchlist']
     result = {}
+    #? Modificare per multithread??
     for symbol in watchlist:
         data = de.Stock(symbol)
         result.update({symbol : data.get_data()})    
